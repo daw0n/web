@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace = "org.james.member">
+	<resultMap id="memberResultMap" type="member">
+		<result property="no" column="mno"/>
+		<result property="name" column="mname"/>
+		<result property="email" column="email"/>
+		<result property="createdDate" column="cre_date"/>
+	</resultMap>
+	
+	<select id="selectMembers" resultMap="memberResultMap">
+		SELECT MNO,MNAME,EMAIL,CRE_DATE
+		FROM MEMBERS
+		ORDER BY MNO ASC
+	</select>
+	
+	<insert id="insertMemberInfo" parameterType="member">
+		INSERT INTO MEMBERS(EMAIL,PWD,MNAME,CRE_DATE,MOD_DATE)
+		VALUES (#{email}, #{password}, #{name}, NOW(), NOW())
+	</insert>
+	
+	<select id="selectMember" parameterType="member" resultMap="memberResultMap">
+		SELECT MNO,MNAME,EMAIL,CRE_DATE
+		FROM MEMBERS
+		WHERE MNO=#{no}
+	</select>
+	
+	<update id="updateMember" parameterType="member">
+		UPDATE MEMBERS SET EMAIL=#{email}, MNAME=#{name}, MOD_DATE=now()
+		WHERE MNO=#{no}
+	</update>
+	
+	<delete id="deleteMember" parameterType="int">
+		DELETE FROM MEMBERS
+		WHERE MNO=#{no}
+	</delete>
+	
+	<select id="selectCheckingMember" parameterType="member" resultMap="memberResultMap">
+		SELECT MNO,MNAME,EMAIL,CRE_DATE
+		FROM MEMBERS
+		WHERE EMAIL=#{email}
+		AND PWD=#{password}
+	</select>
+</mapper>
